@@ -6,15 +6,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import {
   Microscope,
-  CalendarCheck,
-  FlaskConical,
   Search,
   ShieldCheck,
   UserCheck,
   LogOut,
   Menu,
   X,
-  ChevronDown,
 } from 'lucide-react';
 
 export function Navbar() {
@@ -112,33 +109,33 @@ export function Navbar() {
 
       {/* Main Navigation */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-18">
           {/* Brand Logo & Name */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-700 to-cyan-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-              <Microscope className="w-5 h-5" />
+          <Link href="/" className="flex items-center gap-3.5 group">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#0052FF] to-[#4D7CFF] flex items-center justify-center text-white shadow-md shadow-[#0052FF]/20 group-hover:scale-105 group-hover:shadow-accent transition-all duration-300">
+              <Microscope className="w-5 h-5 transition-transform duration-300 group-hover:rotate-6" />
             </div>
             <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-slate-900 tracking-tight text-base sm:text-lg">
+              <div className="flex items-center gap-2">
+                <span className="font-serif font-normal text-slate-950 tracking-tight text-lg sm:text-xl">
                   R&D Resource Portal
                 </span>
-                <span className="text-[10px] uppercase tracking-wider font-semibold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">
+                <span className="text-[10px] uppercase font-mono tracking-[0.15em] font-semibold bg-[#0052FF]/10 text-[#0052FF] px-2 py-0.5 rounded-full border border-[#0052FF]/20">
                   R&D Cell
                 </span>
               </div>
-              <p className="text-xs text-slate-500 hidden sm:block">Research and Development Cell, Parul University</p>
+              <p className="text-xs text-slate-500 font-sans hidden sm:block">Research & Development Cell, Parul University</p>
             </div>
           </Link>
 
           {/* Desktop Links */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <nav className="hidden md:flex items-center space-x-1 lg:space-x-1.5">
             <Link
               href="/catalog"
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                 isActive('/catalog')
-                  ? 'bg-blue-50 text-blue-700 font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'bg-[#0052FF]/10 text-[#0052FF] font-semibold'
+                  : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/80'
               }`}
             >
               Equipment Catalog
@@ -146,10 +143,10 @@ export function Navbar() {
 
             <Link
               href="/book"
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                 isActive('/book')
-                  ? 'bg-blue-50 text-blue-700 font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'bg-[#0052FF]/10 text-[#0052FF] font-semibold'
+                  : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/80'
               }`}
             >
               Book Equipment
@@ -157,10 +154,10 @@ export function Navbar() {
 
             <Link
               href="/submit-sample"
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                 isActive('/submit-sample')
-                  ? 'bg-blue-50 text-blue-700 font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'bg-[#0052FF]/10 text-[#0052FF] font-semibold'
+                  : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/80'
               }`}
             >
               Submit Sample
@@ -168,10 +165,10 @@ export function Navbar() {
 
             <Link
               href="/track"
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 transition-colors ${
+              className={`px-3.5 py-2 rounded-xl text-sm font-medium flex items-center gap-1.5 transition-all duration-200 ${
                 isActive('/track')
-                  ? 'bg-blue-50 text-blue-700 font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'bg-[#0052FF]/10 text-[#0052FF] font-semibold'
+                  : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/80'
               }`}
             >
               <Search className="w-3.5 h-3.5 text-slate-400" />
@@ -180,13 +177,13 @@ export function Navbar() {
 
             <Link
               href="/about"
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                 isActive('/about')
-                  ? 'bg-blue-50 text-blue-700 font-semibold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'bg-[#0052FF]/10 text-[#0052FF] font-semibold'
+                  : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/80'
               }`}
             >
-              About & Guidelines
+              About
             </Link>
           </nav>
 
@@ -196,7 +193,7 @@ export function Navbar() {
               <div className="flex items-center gap-2">
                 <Link
                   href={role === 'admin' ? '/admin' : role === 'reception' ? '/reception' : '/owner'}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-700 text-white text-sm font-medium shadow-xs hover:bg-blue-800 transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#0052FF] to-[#4D7CFF] text-white text-sm font-medium shadow-xs hover:shadow-accent hover:-translate-y-0.5 transition-all duration-200 active:scale-[0.98]"
                 >
                   <ShieldCheck className="w-4 h-4" />
                   {role === 'admin'
@@ -209,7 +206,7 @@ export function Navbar() {
                 <button
                   onClick={logout}
                   title="Logout"
-                  className="p-1.5 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                  className="p-2 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
@@ -217,7 +214,7 @@ export function Navbar() {
             ) : (
               <Link
                 href="/login"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 text-sm font-medium hover:border-[#0052FF]/40 hover:bg-slate-50 hover:shadow-xs transition-all duration-200"
               >
                 <UserCheck className="w-4 h-4 text-slate-500" />
                 Staff Sign In

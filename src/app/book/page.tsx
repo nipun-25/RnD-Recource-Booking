@@ -1,19 +1,17 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
-  CalendarCheck,
   CheckCircle2,
   Copy,
   ArrowRight,
-  ShieldAlert,
-  Clock,
-  Sparkles,
 } from 'lucide-react';
 import { dataStore } from '@/lib/data-adapter';
 import { Equipment, ServiceRequest } from '@/types';
+import { SectionBadge } from '@/components/ui/SectionBadge';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
 
 function BookFormContent() {
   const searchParams = useSearchParams();
@@ -89,271 +87,280 @@ function BookFormContent() {
 
   if (createdRequest) {
     return (
-      <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6">
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm text-center space-y-6">
-          <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-10 h-10" />
+      <div className="max-w-2xl mx-auto py-16 px-4 sm:px-6">
+        <Card variant="elevated" className="p-8 sm:p-10 text-center space-y-6">
+          <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto border border-emerald-200">
+            <CheckCircle2 className="w-9 h-9" />
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-slate-900">Equipment Booking Request Submitted!</h2>
-            <p className="text-xs sm:text-sm text-slate-600">
-              Your reservation request has been dispatched to central reception. Retain your non-sequential tracking ID to monitor review, quotation, and scheduling.
+            <h2 className="font-calistoga text-2xl sm:text-3xl text-[#0F172A]">
+              Equipment Booking Dispatched
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
+              Your reservation request has been submitted to the R&D Cell intake queue. Save your unique tracking ID to monitor technical triage, quotation, and scheduling.
             </p>
           </div>
 
           {/* Tracking ID Box */}
-          <div className="bg-slate-50 border-2 border-dashed border-blue-200 rounded-xl p-5 space-y-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <div className="bg-slate-50 rounded-2xl border border-slate-200/80 p-6 space-y-2">
+            <span className="text-[10px] font-mono font-medium uppercase tracking-[0.15em] text-slate-400">
               Official Tracking Identifier
             </span>
             <div className="flex items-center justify-center gap-3">
-              <span className="text-2xl sm:text-3xl font-mono font-extrabold text-blue-700">
+              <span className="text-2xl sm:text-3xl font-mono font-black text-[#0052FF]">
                 {createdRequest.trackingId}
               </span>
               <button
                 type="button"
                 onClick={handleCopy}
-                className="p-2 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-blue-700 shadow-xs transition-colors"
+                className="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-[#0052FF] hover:border-[#0052FF]/30 transition-all shadow-xs cursor-pointer active:scale-95"
                 title="Copy Tracking ID"
               >
                 <Copy className="w-4 h-4" />
               </button>
             </div>
-            {copied && <p className="text-[11px] text-emerald-600 font-medium">Copied to clipboard!</p>}
+            {copied && <p className="text-[11px] font-mono text-emerald-600 font-medium">Copied to clipboard!</p>}
           </div>
 
-          <div className="text-left text-xs bg-slate-50 p-4 rounded-xl space-y-1.5 text-slate-700 border border-slate-100">
-            <p><strong>Project Title:</strong> {createdRequest.projectTitle}</p>
-            <p><strong>Preferred Date:</strong> {createdRequest.preferredDateStart}</p>
-            <p><strong>Initial Status:</strong> In Queue for Reception Triage</p>
+          <div className="text-left text-xs bg-slate-50/80 p-5 rounded-2xl space-y-2 text-slate-700 border border-slate-100 font-mono">
+            <p><span className="text-slate-400 font-sans">Project Title:</span> {createdRequest.projectTitle}</p>
+            <p><span className="text-slate-400 font-sans">Requested Date:</span> {createdRequest.preferredDateStart}</p>
+            <p><span className="text-slate-400 font-sans">Status:</span> <span className="text-[#0052FF] font-semibold">Triage & Owner Feasibility Review</span></p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <Link
+            <Button
               href={`/track?id=${createdRequest.trackingId}`}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-semibold text-xs inline-flex items-center justify-center gap-1.5 shadow-xs"
+              variant="primary"
+              size="md"
+              icon={<ArrowRight className="w-4 h-4" />}
             >
               Track Request Status
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            </Button>
 
-            <button
+            <Button
+              variant="outline"
+              size="md"
               onClick={() => {
                 setCreatedRequest(null);
                 setFormData((prev) => ({ ...prev, projectTitle: '', purposeNotes: '' }));
               }}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-semibold"
             >
               Submit Another Booking
-            </button>
+            </Button>
           </div>
-        </div>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      <div>
-        <div className="flex items-center gap-2 text-blue-700 text-xs font-bold uppercase tracking-wider mb-1">
-          <CalendarCheck className="w-4 h-4" />
-          <span>R&D Cell • Resource Booking</span>
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Equipment & Resource Booking Request</h1>
-        <p className="text-xs sm:text-sm text-slate-600 mt-1">
-          Reserve instrument operating time. No user account required. You will receive an auditable tracking ID.
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
-        {/* Requester Information */}
-        <div className="space-y-4">
-          <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">
-            1. Requester Information
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Full Name *</label>
-              <input
-                type="text"
-                required
-                value={formData.requesterName}
-                onChange={(e) => setFormData({ ...formData, requesterName: e.target.value })}
-                placeholder="e.g. Dr. Ramesh Kumar / Ananya Patel"
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Official Email Address *</label>
-              <input
-                type="email"
-                required
-                value={formData.requesterEmail}
-                onChange={(e) => setFormData({ ...formData, requesterEmail: e.target.value })}
-                placeholder="name@paruluniversity.ac.in or corporate email"
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Mobile / WhatsApp Number *</label>
-              <input
-                type="tel"
-                required
-                value={formData.requesterPhone}
-                onChange={(e) => setFormData({ ...formData, requesterPhone: e.target.value })}
-                placeholder="+91 98765 43210"
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Organization / Institution *</label>
-              <input
-                type="text"
-                required
-                value={formData.requesterOrg}
-                onChange={(e) => setFormData({ ...formData, requesterOrg: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Department / Lab Unit *</label>
-              <input
-                type="text"
-                required
-                value={formData.department}
-                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                placeholder="e.g. Department of Physics, Faculty of Applied Sciences"
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Equipment & Scheduling */}
-        <div className="space-y-4">
-          <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">
-            2. Selected Equipment & Timing
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="sm:col-span-2">
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Choose Instrument *</label>
-              <select
-                required
-                value={formData.equipmentId}
-                onChange={(e) => setFormData({ ...formData, equipmentId: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              >
-                {equipmentList.map((eq) => (
-                  <option key={eq.id} value={eq.id}>
-                    {eq.name} ({eq.category}) — ₹{eq.hourlyRateDemo}/hr
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Preferred Date *</label>
-              <input
-                type="date"
-                required
-                value={formData.preferredDateStart}
-                onChange={(e) => setFormData({ ...formData, preferredDateStart: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Preferred Slot *</label>
-              <select
-                value={formData.preferredTimeSlot}
-                onChange={(e) => setFormData({ ...formData, preferredTimeSlot: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              >
-                <option value="10:00 - 13:00 (Morning Slot)">10:00 - 13:00 (Morning Slot)</option>
-                <option value="14:00 - 17:00 (Afternoon Slot)">14:00 - 17:00 (Afternoon Slot)</option>
-                <option value="09:00 - 12:00 (Early Slot)">09:00 - 12:00 (Early Slot)</option>
-                <option value="Custom Extended Session">Custom Extended Session</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Estimated Hours Needed *</label>
-              <input
-                type="number"
-                min="1"
-                max="8"
-                required
-                value={formData.scheduledUsageHours}
-                onChange={(e) => setFormData({ ...formData, scheduledUsageHours: Number(e.target.value) })}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Project Scope & Requirements */}
-        <div className="space-y-4">
-          <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">
-            3. Project Purpose & Technical Scope
-          </h2>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Research / Project Title *</label>
-              <input
-                type="text"
-                required
-                value={formData.projectTitle}
-                onChange={(e) => setFormData({ ...formData, projectTitle: e.target.value })}
-                placeholder="e.g. High-Resolution Surface Profiling of Graphene Thin Films"
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Technical Purpose & Special Sample Requirements *
-              </label>
-              <textarea
-                rows={3}
-                required
-                value={formData.purposeNotes}
-                onChange={(e) => setFormData({ ...formData, purposeNotes: e.target.value })}
-                placeholder="Describe material type, dimensions, desired magnification/parameters, or whether sputter coating is needed..."
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Submission Button */}
-        <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[11px] text-slate-500">
-            By submitting, you agree to follow the university laboratory operating and safety protocols.
+    <div className="bg-[#FAFAFA] min-h-screen py-10 sm:py-16">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="space-y-3">
+          <SectionBadge label="EQUIPMENT RESERVATION" />
+          <h1 className="font-calistoga text-3xl sm:text-4xl text-[#0F172A] tracking-tight">
+            Reserve Research Equipment Slot
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-600 max-w-xl leading-relaxed">
+            Submit your research schedule requirements. No login required. Your submission produces a non-sequential, public-safe tracking ID.
           </p>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full sm:w-auto px-8 py-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-semibold text-xs shadow-md transition-colors disabled:opacity-50"
-          >
-            {loading ? 'Submitting...' : 'Submit Booking Request'}
-          </button>
         </div>
-      </form>
+
+        <form onSubmit={handleSubmit}>
+          <Card variant="elevated" className="p-6 sm:p-10 space-y-8">
+            {/* Requester Information */}
+            <div className="space-y-4">
+              <h2 className="text-xs font-mono font-semibold text-slate-900 uppercase tracking-[0.15em] border-b border-slate-100 pb-2">
+                1. Investigator / Requester Identity
+              </h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Full Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.requesterName}
+                    onChange={(e) => setFormData({ ...formData, requesterName: e.target.value })}
+                    placeholder="e.g. Dr. Ramesh Kumar / Ananya Patel"
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Official Email Address *</label>
+                  <input
+                    type="email"
+                    required
+                    value={formData.requesterEmail}
+                    onChange={(e) => setFormData({ ...formData, requesterEmail: e.target.value })}
+                    placeholder="name@paruluniversity.ac.in"
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Mobile / Contact *</label>
+                  <input
+                    type="tel"
+                    required
+                    value={formData.requesterPhone}
+                    onChange={(e) => setFormData({ ...formData, requesterPhone: e.target.value })}
+                    placeholder="+91 98765 43210"
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Institution / Affiliation *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.requesterOrg}
+                    onChange={(e) => setFormData({ ...formData, requesterOrg: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none transition-all"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Department / Research Center *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.department}
+                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                    placeholder="e.g. Department of Physics, Faculty of Applied Sciences"
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Equipment & Scheduling */}
+            <div className="space-y-4">
+              <h2 className="text-xs font-mono font-semibold text-slate-900 uppercase tracking-[0.15em] border-b border-slate-100 pb-2">
+                2. Selected Equipment & Timing
+              </h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Choose Instrument *</label>
+                  <select
+                    required
+                    value={formData.equipmentId}
+                    onChange={(e) => setFormData({ ...formData, equipmentId: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none cursor-pointer"
+                  >
+                    {equipmentList.map((eq) => (
+                      <option key={eq.id} value={eq.id}>
+                        {eq.name} ({eq.category}) — Demo Rate: ₹{eq.hourlyRateDemo}/hr
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Preferred Date *</label>
+                  <input
+                    type="date"
+                    required
+                    value={formData.preferredDateStart}
+                    onChange={(e) => setFormData({ ...formData, preferredDateStart: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Preferred Slot Window *</label>
+                  <select
+                    value={formData.preferredTimeSlot}
+                    onChange={(e) => setFormData({ ...formData, preferredTimeSlot: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none cursor-pointer"
+                  >
+                    <option value="10:00 - 13:00 (Morning Slot)">10:00 - 13:00 (Morning Slot)</option>
+                    <option value="14:00 - 17:00 (Afternoon Slot)">14:00 - 17:00 (Afternoon Slot)</option>
+                    <option value="09:00 - 12:00 (Early Slot)">09:00 - 12:00 (Early Slot)</option>
+                    <option value="Custom Extended Session">Custom Extended Session</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Estimated Hours Needed *</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="8"
+                    required
+                    value={formData.scheduledUsageHours}
+                    onChange={(e) => setFormData({ ...formData, scheduledUsageHours: Number(e.target.value) })}
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Scope */}
+            <div className="space-y-4">
+              <h2 className="text-xs font-mono font-semibold text-slate-900 uppercase tracking-[0.15em] border-b border-slate-100 pb-2">
+                3. Project Scope & Technical Objectives
+              </h2>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">Project / Research Title *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.projectTitle}
+                    onChange={(e) => setFormData({ ...formData, projectTitle: e.target.value })}
+                    placeholder="e.g. High-Resolution Surface Profiling of Graphene Thin Films"
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                    Technical Purpose & Special Sample Parameters *
+                  </label>
+                  <textarea
+                    rows={3}
+                    required
+                    value={formData.purposeNotes}
+                    onChange={(e) => setFormData({ ...formData, purposeNotes: e.target.value })}
+                    placeholder="Describe material type, substrate dimensions, magnification, or whether sputter coating is needed..."
+                    className="w-full px-3.5 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Submit Bar */}
+            <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className="text-[11px] text-slate-400">
+                Submissions are governed by Parul University laboratory and equipment usage regulations.
+              </p>
+              <Button
+                type="submit"
+                variant="primary"
+                size="md"
+                disabled={loading}
+                icon={<ArrowRight className="w-4 h-4" />}
+              >
+                {loading ? 'Submitting...' : 'Submit Booking Request'}
+              </Button>
+            </div>
+          </Card>
+        </form>
+      </div>
     </div>
   );
 }
 
 export default function BookPage() {
   return (
-    <Suspense fallback={<div className="p-12 text-center text-xs text-slate-500">Loading booking interface...</div>}>
+    <Suspense fallback={<div className="p-16 text-center text-xs font-mono text-slate-500">Loading booking interface...</div>}>
       <BookFormContent />
     </Suspense>
   );

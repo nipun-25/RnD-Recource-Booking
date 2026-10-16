@@ -2,21 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  Inbox,
   Search,
   Filter,
-  UserCheck,
-  CheckCircle2,
-  Calendar,
-  Microscope,
-  FileText,
-  AlertCircle,
   X,
 } from 'lucide-react';
 import { dataStore } from '@/lib/data-adapter';
 import { ServiceRequest, Equipment, StaffUser, WorkflowStatus } from '@/types';
 import { StatusBadge } from '@/components/StatusBadge';
 import { useAuth } from '@/lib/auth-context';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
 
 export default function AdminRequestsPage() {
   const { currentUser } = useAuth();
@@ -84,7 +79,7 @@ export default function AdminRequestsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">Request & Sample Master Registry</h2>
+          <h2 className="font-calistoga text-2xl text-[#0F172A]">Request & Sample Master Registry</h2>
           <p className="text-xs text-slate-500">
             Global administrative view of all submitted instrument reservations, technical reviews, and testing runs.
           </p>
@@ -92,25 +87,25 @@ export default function AdminRequestsPage() {
       </div>
 
       {/* Filter and Search */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+      <Card variant="elevated" className="p-4 sm:p-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
         <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             placeholder="Search by Tracking ID, investigator, or project..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-purple-500 focus:outline-none"
+            className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none transition-all"
           />
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-slate-600">
+        <div className="flex items-center gap-2 text-xs text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
           <Filter className="w-3.5 h-3.5 text-slate-400" />
-          <span>Status Filter:</span>
+          <span className="font-medium">Filter:</span>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="border border-slate-200 rounded-lg py-1.5 px-2 bg-white text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+            className="bg-transparent border-none text-xs font-medium text-slate-800 focus:outline-none cursor-pointer"
           >
             <option value="ALL">All Statuses ({requests.length})</option>
             <option value="SUBMITTED">SUBMITTED</option>
@@ -122,20 +117,20 @@ export default function AdminRequestsPage() {
             <option value="COMPLETED">COMPLETED</option>
           </select>
         </div>
-      </div>
+      </Card>
 
       {/* Requests Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+      <Card variant="elevated" className="p-0 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+          <table className="w-full text-left text-xs font-mono">
+            <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 text-[11px]">
               <tr>
-                <th className="py-3 px-4">Tracking ID & Type</th>
-                <th className="py-3 px-4">Requester & Org</th>
-                <th className="py-3 px-4">Instrument Required</th>
-                <th className="py-3 px-4">Workflow Status</th>
-                <th className="py-3 px-4">Assigned Specialist</th>
-                <th className="py-3 px-4 text-right">Action</th>
+                <th className="py-3.5 px-4 font-sans font-semibold">Tracking ID & Type</th>
+                <th className="py-3.5 px-4 font-sans font-semibold">Requester & Org</th>
+                <th className="py-3.5 px-4 font-sans font-semibold">Instrument Required</th>
+                <th className="py-3.5 px-4 font-sans font-semibold">Workflow Status</th>
+                <th className="py-3.5 px-4 font-sans font-semibold">Assigned Specialist</th>
+                <th className="py-3.5 px-4 text-right font-sans font-semibold">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -144,40 +139,40 @@ export default function AdminRequestsPage() {
                 const assignedOwner = staffList.find((s) => s.id === req.assignedOwnerId);
 
                 return (
-                  <tr key={req.id} className="hover:bg-slate-50/60">
-                    <td className="py-3 px-4">
-                      <span className="font-mono font-bold text-purple-700">{req.trackingId}</span>
-                      <p className="text-[10px] uppercase font-semibold text-slate-400">
+                  <tr key={req.id} className="hover:bg-slate-50/60 transition-colors">
+                    <td className="py-4 px-4">
+                      <span className="font-mono font-bold text-[#0052FF] block">{req.trackingId}</span>
+                      <span className="text-[10px] uppercase font-mono text-slate-400">
                         {req.requestType.replace('_', ' ')}
-                      </p>
+                      </span>
                     </td>
 
-                    <td className="py-3 px-4">
-                      <p className="font-bold text-slate-900">{req.requesterName}</p>
+                    <td className="py-4 px-4 font-sans">
+                      <p className="font-semibold text-slate-900">{req.requesterName}</p>
                       <p className="text-[11px] text-slate-500 truncate max-w-xs">{req.requesterOrg}</p>
                     </td>
 
-                    <td className="py-3 px-4">
+                    <td className="py-4 px-4 font-sans">
                       <p className="font-semibold text-slate-800">{eq ? eq.name : 'Unknown Instrument'}</p>
-                      <p className="text-[11px] text-slate-500">Date: {req.preferredDateStart}</p>
+                      <p className="text-[11px] text-slate-400 font-mono">Date: {req.preferredDateStart}</p>
                     </td>
 
-                    <td className="py-3 px-4">
+                    <td className="py-4 px-4">
                       <StatusBadge status={req.status} isPublic={false} />
                     </td>
 
-                    <td className="py-3 px-4 text-slate-700">
-                      {assignedOwner ? assignedOwner.fullName : <span className="text-amber-600">Pending Assignment</span>}
+                    <td className="py-4 px-4 font-sans text-slate-700">
+                      {assignedOwner ? assignedOwner.fullName : <span className="text-amber-600 font-medium font-mono text-[11px]">Pending Assignment</span>}
                     </td>
 
-                    <td className="py-3 px-4 text-right">
+                    <td className="py-4 px-4 text-right">
                       <button
                         onClick={() => {
                           setSelectedRequest(req);
                           setTargetStatus(req.status);
                           setTargetOwner(req.assignedOwnerId || '');
                         }}
-                        className="px-3 py-1.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 font-semibold text-xs transition-colors"
+                        className="px-3 py-1.5 rounded-lg bg-[#0052FF]/10 hover:bg-[#0052FF]/20 text-[#0052FF] font-mono font-semibold text-xs transition-colors cursor-pointer"
                       >
                         Inspect / Override
                       </button>
@@ -188,68 +183,42 @@ export default function AdminRequestsPage() {
             </tbody>
           </table>
         </div>
-      </div>
+      </Card>
 
       {/* Detail / Override Modal */}
       {selectedRequest && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <Card variant="elevated" className="max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-5 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div>
-                <span className="text-xs font-mono font-bold text-purple-700">
-                  {selectedRequest.trackingId}
-                </span>
-                <h3 className="text-base font-bold text-slate-900">
-                  Administrative Request Inspector & Override
+                <span className="text-xs font-mono font-bold text-[#0052FF]">{selectedRequest.trackingId}</span>
+                <h3 className="font-calistoga text-xl text-[#0F172A] mt-0.5">
+                  Administrative Workflow Override
                 </h3>
               </div>
               <button
                 onClick={() => setSelectedRequest(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 text-xs bg-slate-50 p-4 rounded-xl border border-slate-100">
-              <div>
-                <span className="text-slate-500">Requester:</span>
-                <p className="font-semibold text-slate-900">{selectedRequest.requesterName}</p>
-                <p className="text-[11px] text-slate-500">{selectedRequest.requesterEmail} • {selectedRequest.requesterPhone}</p>
-              </div>
-
-              <div>
-                <span className="text-slate-500">Project / Scope:</span>
-                <p className="font-semibold text-slate-900">{selectedRequest.projectTitle}</p>
-                <p className="text-[11px] text-slate-500">{selectedRequest.purposeNotes}</p>
-              </div>
-
-              {selectedRequest.sampleDetails && (
-                <div className="col-span-2 border-t border-slate-200 pt-2">
-                  <span className="text-slate-500">Sample Parameters:</span>
-                  <p className="text-slate-800">
-                    {selectedRequest.sampleDetails.description} ({selectedRequest.sampleDetails.quantity}) •
-                    Hazard: {selectedRequest.sampleDetails.isHazardous ? 'YES' : 'NONE'}
-                  </p>
-                </div>
-              )}
-
-              <div className="col-span-2 border-t border-slate-200 pt-2">
-                <span className="text-slate-500">Internal Audit Trail Notes:</span>
-                <pre className="text-[11px] text-slate-700 bg-white p-2 rounded border border-slate-200 font-mono whitespace-pre-wrap mt-1">
-                  {selectedRequest.internalNotes || 'No internal notes recorded yet.'}
-                </pre>
-              </div>
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs space-y-2 font-mono">
+              <p><span className="text-slate-400 font-sans">Project:</span> {selectedRequest.projectTitle}</p>
+              <p><span className="text-slate-400 font-sans">Requester:</span> {selectedRequest.requesterName} ({selectedRequest.requesterOrg})</p>
+              <p><span className="text-slate-400 font-sans">Current Status:</span> <span className="text-[#0052FF] font-bold">{selectedRequest.status}</span></p>
+              <p><span className="text-slate-400 font-sans">Notes:</span> {selectedRequest.purposeNotes}</p>
             </div>
 
             <form onSubmit={handleUpdateStatus} className="space-y-4 text-xs">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Override Workflow Status</label>
+                  <label className="block font-semibold text-slate-700 mb-1.5">Direct Status Transition</label>
                   <select
                     value={targetStatus}
                     onChange={(e) => setTargetStatus(e.target.value as WorkflowStatus)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none cursor-pointer font-mono"
                   >
                     <option value="SUBMITTED">SUBMITTED</option>
                     <option value="UNDER_REVIEW">UNDER_REVIEW</option>
@@ -260,22 +229,22 @@ export default function AdminRequestsPage() {
                     <option value="CONFIRMED">CONFIRMED</option>
                     <option value="SAMPLES_RECEIVED">SAMPLES_RECEIVED</option>
                     <option value="PROCESSING">PROCESSING</option>
-                    <option value="COMPLETED">COMPLETED</option>
                     <option value="READY_FOR_HANDOVER">READY_FOR_HANDOVER</option>
                     <option value="DISPATCHED">DISPATCHED</option>
+                    <option value="COMPLETED">COMPLETED</option>
+                    <option value="REJECTED">REJECTED</option>
                     <option value="ON_HOLD">ON_HOLD</option>
-                    <option value="CANCELLED">CANCELLED</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Reassign Equipment Specialist</label>
+                  <label className="block font-semibold text-slate-700 mb-1.5">Assign / Reassign Owner</label>
                   <select
                     value={targetOwner}
                     onChange={(e) => setTargetOwner(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none cursor-pointer"
                   >
-                    <option value="">-- Leave Unchanged --</option>
+                    <option value="">-- Leave Unchanged / Unassigned --</option>
                     {staffList
                       .filter((s) => s.role === 'owner')
                       .map((st) => (
@@ -288,36 +257,36 @@ export default function AdminRequestsPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  Administrative Override Reason / Notes
-                </label>
+                <label className="block font-semibold text-slate-700 mb-1.5">Audit Action Description *</label>
                 <textarea
                   rows={2}
                   required
                   value={actionNotes}
                   onChange={(e) => setActionNotes(e.target.value)}
-                  placeholder="Record formal justification for status adjustment or staff reassignment..."
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  placeholder="Reason for administrative status transition..."
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none"
                 />
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setSelectedRequest(null)}
-                  className="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 font-semibold"
                 >
-                  Close
-                </button>
-                <button
+                  Cancel
+                </Button>
+                <Button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-semibold shadow-xs"
+                  variant="primary"
+                  size="sm"
                 >
-                  Save Administrative Changes
-                </button>
+                  Apply Administrative Override
+                </Button>
               </div>
             </form>
-          </div>
+          </Card>
         </div>
       )}
     </div>

@@ -3,18 +3,23 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
-  Microscope,
   CalendarCheck,
   FlaskConical,
   Search,
   ArrowRight,
   Layers,
-  Sparkles,
   Clock,
   Building2,
+  ChevronRight,
+  Microscope,
 } from 'lucide-react';
 import { dataStore } from '@/lib/data-adapter';
 import { Equipment } from '@/types';
+import { SectionBadge } from '@/components/ui/SectionBadge';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { InvertedSection } from '@/components/ui/InvertedSection';
+import { HeroGraphic } from '@/components/home/HeroGraphic';
 
 export default function HomePage() {
   const [equipmentList, setEquipmentList] = useState<Equipment[]>([]);
@@ -24,233 +29,344 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900 text-white py-20 px-4 sm:px-6 lg:px-8 border-b border-slate-800">
-        <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:24px_24px] opacity-15" />
-        <div className="relative max-w-6xl mx-auto text-center space-y-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-xs sm:text-sm font-medium">
-            <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span>Research and Development Cell (R&D Cell) • Parul University</span>
-          </div>
+    <div className="flex flex-col bg-[#FAFAFA] min-h-screen">
+      {/* 1. Asymmetric Modern Hero Section */}
+      <section className="relative overflow-hidden pt-12 pb-20 sm:pt-20 sm:pb-28 lg:pt-24 lg:pb-32 px-4 sm:px-6 lg:px-8 border-b border-slate-200/80">
+        {/* Subtle background ambient radial gradient */}
+        <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(0,82,255,0.06),transparent_70%)]" />
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight max-w-4xl mx-auto leading-tight">
-            R&D Resource Management Portal
-          </h1>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-center gap-12 lg:gap-16">
+            {/* Left Dominant Column */}
+            <div className="space-y-6 sm:space-y-8 text-left">
+              <SectionBadge label="R&D Cell • Parul University" />
 
-          <p className="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            Centralized portal for university researchers, faculty investigators, and collaborative scholars to reserve institutional research equipment, submit sample testing requests, and track workflow progress.
-          </p>
+              <h1 className="font-calistoga text-4xl sm:text-5xl lg:text-[3.5rem] text-[#0F172A] leading-[1.12] tracking-tight">
+                Institutional Research{' '}
+                <span className="relative inline-block">
+                  <span className="text-gradient">Resource Portal</span>
+                  <span className="gradient-underline" />
+                </span>
+              </h1>
 
-          {/* Call to Actions */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-            <Link
-              href="/catalog"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-blue-600 text-white font-semibold text-sm shadow-lg shadow-blue-600/30 hover:bg-blue-500 transition-all transform hover:-translate-y-0.5"
-            >
-              <Microscope className="w-4 h-4" />
-              Browse Resource Catalog
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+              <p className="text-base sm:text-lg text-slate-600 max-w-xl leading-relaxed">
+                Centralized gateway for university researchers, faculty investigators, and scholars to reserve institutional characterization instruments, submit testing samples, and track workflows in real time.
+              </p>
 
-            <Link
-              href="/book"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white/10 text-white font-semibold text-sm border border-white/20 hover:bg-white/20 transition-all"
-            >
-              <CalendarCheck className="w-4 h-4 text-emerald-400" />
-              Book Equipment Slot
-            </Link>
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                <Button
+                  href="/catalog"
+                  variant="primary"
+                  size="lg"
+                  icon={<ArrowRight className="w-4 h-4" />}
+                >
+                  Browse Catalog
+                </Button>
 
-            <Link
-              href="/submit-sample"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white/10 text-white font-semibold text-sm border border-white/20 hover:bg-white/20 transition-all"
-            >
-              <FlaskConical className="w-4 h-4 text-cyan-400" />
-              Submit Sample for Testing
-            </Link>
+                <Button
+                  href="/book"
+                  variant="outline"
+                  size="lg"
+                  icon={<CalendarCheck className="w-4 h-4 text-[#0052FF]" />}
+                  iconPosition="left"
+                >
+                  Book Slot
+                </Button>
 
-            <Link
-              href="/track"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-slate-800 text-slate-200 font-semibold text-sm border border-slate-700 hover:bg-slate-700 transition-all"
-            >
-              <Search className="w-4 h-4 text-amber-400" />
-              Track Tracking ID
-            </Link>
-          </div>
+                <Button
+                  href="/submit-sample"
+                  variant="outline"
+                  size="lg"
+                  icon={<FlaskConical className="w-4 h-4 text-[#4D7CFF]" />}
+                  iconPosition="left"
+                >
+                  Submit Sample
+                </Button>
 
-          {/* Quick Notice */}
-          <div className="pt-6">
-            <span className="text-xs text-slate-400 bg-slate-800/80 px-3 py-1 rounded-md border border-slate-700">
-              Note: Demonstration data loaded. Actual university equipment information and pricing will be connected in Phase 8.
-            </span>
+                <Button
+                  href="/track"
+                  variant="ghost"
+                  size="lg"
+                  icon={<Search className="w-4 h-4 text-slate-500" />}
+                  iconPosition="left"
+                >
+                  Track ID
+                </Button>
+              </div>
+
+              {/* Minimal Demo Notice Pill */}
+              <div className="pt-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100/80 border border-slate-200/80 text-[11px] font-mono text-slate-500">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#0052FF]" />
+                  <span>Demonstration records active. Production data to connect in Phase 8.</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Asymmetric Column: Animated Hero Graphic */}
+            <div className="w-full flex justify-center lg:justify-end">
+              <HeroGraphic />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Highlights Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-xs uppercase font-bold tracking-widest text-blue-600 mb-2">Research Infrastructure</h2>
-          <p className="text-2xl sm:text-3xl font-bold text-slate-900">
-            University Research Resources & Specialized Facilities
+      {/* 2. Inverted Contrast Section: Research Metrics & Auditable Standards */}
+      <InvertedSection>
+        <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+          <SectionBadge label="Institutional Metric Framework" className="border-white/20 bg-white/5" />
+          <h2 className="font-calistoga text-3xl sm:text-4xl text-white">
+            Precision Research Infrastructure
+          </h2>
+          <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+            Every booking and testing request follows an auditable custody chain governed by Parul University&apos;s R&D policies.
           </p>
-          <p className="text-slate-600 text-sm mt-2">
-            Supporting multidisciplinary investigation, doctoral research, and sponsored institutional projects across departments.
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+          <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 text-center space-y-2 backdrop-blur-xs">
+            <div className="font-calistoga text-3xl sm:text-4xl text-white text-gradient">35+</div>
+            <div className="text-xs font-mono uppercase tracking-wider text-slate-400">Advanced Instruments</div>
+            <p className="text-[11px] text-slate-500">Characterization, spectroscopy & fabrication</p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 text-center space-y-2 backdrop-blur-xs">
+            <div className="font-calistoga text-3xl sm:text-4xl text-white text-gradient">100%</div>
+            <div className="text-xs font-mono uppercase tracking-wider text-slate-400">Auditable Tracking</div>
+            <p className="text-[11px] text-slate-500">Unique tracking IDs with status logging</p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 text-center space-y-2 backdrop-blur-xs">
+            <div className="font-calistoga text-3xl sm:text-4xl text-white text-gradient">24-48h</div>
+            <div className="text-xs font-mono uppercase tracking-wider text-slate-400">Triage Turnaround</div>
+            <p className="text-[11px] text-slate-500">Rapid feasibility review by equipment owners</p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 text-center space-y-2 backdrop-blur-xs">
+            <div className="font-calistoga text-3xl sm:text-4xl text-white text-gradient">14+</div>
+            <div className="text-xs font-mono uppercase tracking-wider text-slate-400">Academic Disciplines</div>
+            <p className="text-[11px] text-slate-500">Engineering, pharmacy, applied sciences</p>
+          </div>
+        </div>
+      </InvertedSection>
+
+      {/* 3. Core Pillars / Facilities Overview */}
+      <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
+        <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+          <SectionBadge label="Capabilities & Facilities" />
+          <h2 className="font-calistoga text-3xl sm:text-4xl text-[#0F172A]">
+            Multidisciplinary Research Domains
+          </h2>
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            Supporting faculty investigation, funded research grants, doctoral theses, and external collaborative projects.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
+          <Card variant="elevated" className="p-8 space-y-5">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0052FF] to-[#4D7CFF] text-white flex items-center justify-center shadow-accent">
               <Microscope className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">Advanced Characterization</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              High-resolution structural imaging, surface profiling, and topography analysis for materials research and physical sciences.
-            </p>
-          </div>
+            <div>
+              <h3 className="text-lg font-semibold text-[#0F172A] mb-2">High-Resolution Characterization</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Nanoscale structural imaging, scanning probe microscopy, and surface topography profiling for materials science and nanotechnology.
+              </p>
+            </div>
+            <div className="pt-2 flex items-center gap-1.5 text-xs font-medium text-[#0052FF]">
+              <span>TEM, SEM, AFM Systems</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </div>
+          </Card>
 
-          <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4">
+          <Card variant="elevated" className="p-8 space-y-5">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0052FF] to-[#4D7CFF] text-white flex items-center justify-center shadow-accent">
               <Layers className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">Synthesis & Fabrication Systems</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Thin film deposition units, controlled atmosphere thermal furnaces, and patterning systems for device engineering.
-            </p>
-          </div>
+            <div>
+              <h3 className="text-lg font-semibold text-[#0F172A] mb-2">Synthesis & Thin-Film Fabrication</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Physical and chemical vapor deposition, high-temperature tubular furnaces, and cleanroom photolithography setups.
+              </p>
+            </div>
+            <div className="pt-2 flex items-center gap-1.5 text-xs font-medium text-[#0052FF]">
+              <span>Sputtering, CVD, Spin Coaters</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </div>
+          </Card>
 
-          <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center mb-4">
+          <Card variant="elevated" className="p-8 space-y-5">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0052FF] to-[#4D7CFF] text-white flex items-center justify-center shadow-accent">
               <FlaskConical className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-2">Spectroscopy & Chemical Testing</h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Optical absorption, transmittance analysis, and qualitative assay testing supporting pharmaceutical and biological sciences.
-            </p>
-          </div>
+            <div>
+              <h3 className="text-lg font-semibold text-[#0F172A] mb-2">Spectroscopy & Chemical Testing</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Molecular absorption, optical emission, FTIR analysis, and automated assay testing for biological and pharmaceutical investigations.
+              </p>
+            </div>
+            <div className="pt-2 flex items-center gap-1.5 text-xs font-medium text-[#0052FF]">
+              <span>UV-Vis, FTIR, Fluorescence</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </div>
+          </Card>
         </div>
       </section>
 
-      {/* Featured Equipment Preview */}
-      <section className="bg-slate-100 py-16 px-4 sm:px-6 lg:px-8 border-y border-slate-200">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
-            <div>
-              <span className="text-xs uppercase font-bold tracking-widest text-blue-600">Equipment Catalog</span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Featured Research Instruments</h2>
-              <p className="text-sm text-slate-600 mt-1">Sample demo records ready for booking requests</p>
+      {/* 4. Featured Instruments (With FeaturedCard 2px Gradient Stroke) */}
+      <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-slate-100/60 border-y border-slate-200/80">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
+            <div className="space-y-2">
+              <SectionBadge label="Equipment Showcase" />
+              <h2 className="font-calistoga text-3xl sm:text-4xl text-[#0F172A]">Featured Research Instruments</h2>
+              <p className="text-sm text-slate-600">Sample verified demo records ready for booking and testing intake</p>
             </div>
             <Link
               href="/catalog"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-700 hover:text-blue-800"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0052FF] hover:text-[#0040CC] transition-colors"
             >
-              View Full Catalog ({equipmentList.length}+ instruments)
+              <span>View All Instruments</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {equipmentList.map((eq) => (
-              <div
+            {equipmentList.map((eq, idx) => (
+              <Card
                 key={eq.id}
-                className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-lg transition-all flex flex-col justify-between"
+                variant={idx === 0 ? 'featured' : 'elevated'}
+                className="flex flex-col justify-between"
               >
-                <div className="p-6 space-y-4">
+                <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                    <span className="text-[11px] font-mono font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
                       {eq.category}
                     </span>
-                    <span className="text-xs font-medium text-emerald-600 flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span className="text-xs font-medium text-emerald-600 flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                       {eq.status.toUpperCase()}
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-bold text-slate-900 leading-snug">{eq.name}</h3>
-                    <p className="text-xs font-mono text-slate-500 mt-1">{eq.model}</p>
+                    <h3 className="text-base font-semibold text-[#0F172A] leading-snug group-hover:text-[#0052FF] transition-colors">
+                      {eq.name}
+                    </h3>
+                    <p className="text-xs font-mono text-slate-400 mt-1">{eq.model}</p>
                   </div>
 
-                  <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">{eq.description}</p>
+                  <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                    {eq.description}
+                  </p>
 
-                  <div className="pt-2 border-t border-slate-100 text-xs text-slate-500 space-y-1">
-                    <p className="flex items-center gap-1.5">
+                  <div className="pt-3 border-t border-slate-100 text-xs text-slate-500 space-y-1.5">
+                    <p className="flex items-center gap-2">
                       <Clock className="w-3.5 h-3.5 text-slate-400" />
-                      {eq.operatingHours}
+                      <span>{eq.operatingHours}</span>
                     </p>
-                    <p className="flex items-center gap-1.5">
+                    <p className="flex items-center gap-2">
                       <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                      {eq.location}
+                      <span>{eq.location}</span>
                     </p>
                   </div>
                 </div>
 
-                <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-700">Demo Rate: ₹{eq.hourlyRateDemo}/hr</span>
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-mono uppercase text-slate-400 block">Demonstration Fee</span>
+                    <span className="text-xs font-semibold text-slate-900">₹{eq.hourlyRateDemo}/hr</span>
+                  </div>
                   <Link
                     href={`/catalog/${eq.id}`}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:text-blue-800"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#0052FF] hover:underline"
                   >
-                    View Specs
-                    <ArrowRight className="w-3 h-3" />
+                    <span>View Specs</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Workflow Process Guide */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-xs uppercase font-bold tracking-widest text-blue-600 mb-2">Transparent Procedure</h2>
-          <p className="text-2xl sm:text-3xl font-bold text-slate-900">How the Service Workflow Operates</p>
-          <p className="text-slate-600 text-sm mt-2">
-            Every submission follows an auditable lifecycle from reception triage to final handover.
+      {/* 5. Workflow Lifecycle (Connected Process Timeline) */}
+      <section className="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
+        <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+          <SectionBadge label="Transparent Procedure" />
+          <h2 className="font-calistoga text-3xl sm:text-4xl text-[#0F172A]">
+            How the Service Workflow Operates
+          </h2>
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            Every submission follows an auditable 4-stage lifecycle from initial intake to technical verification and report handover.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="p-6 rounded-xl bg-white border border-slate-200">
-            <span className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 font-bold text-sm flex items-center justify-center mb-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+          <Card variant="default" className="p-6 relative">
+            <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0052FF] to-[#4D7CFF] text-white font-mono font-bold text-xs flex items-center justify-center mb-4 shadow-accent">
               01
             </span>
-            <h4 className="font-bold text-slate-900 text-base mb-1">Online Submission</h4>
+            <h4 className="font-semibold text-[#0F172A] text-base mb-1.5">Intake Request</h4>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Requester submits booking or sample intake form. The portal issues a unique tracking ID (e.g. RND-2026-X8K9).
+              Requester submits booking or testing form. The portal generates a cryptographically random, non-sequential tracking ID (e.g. RND-2026-X8K9).
             </p>
-          </div>
+          </Card>
 
-          <div className="p-6 rounded-xl bg-white border border-slate-200">
-            <span className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 font-bold text-sm flex items-center justify-center mb-3">
+          <Card variant="default" className="p-6 relative">
+            <span className="w-9 h-9 rounded-xl bg-slate-900 text-white font-mono font-bold text-xs flex items-center justify-center mb-4">
               02
             </span>
-            <h4 className="font-bold text-slate-900 text-base mb-1">Reception & Owner Review</h4>
+            <h4 className="font-semibold text-[#0F172A] text-base mb-1.5">Reception & Owner Triage</h4>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Central reception screens requirements and routes the file to the assigned equipment owner for technical feasibility.
+              Central reception screens requirements and routes the file to the assigned equipment owner for technical feasibility and slot approval.
             </p>
-          </div>
+          </Card>
 
-          <div className="p-6 rounded-xl bg-white border border-slate-200">
-            <span className="w-8 h-8 rounded-lg bg-teal-100 text-teal-700 font-bold text-sm flex items-center justify-center mb-3">
+          <Card variant="default" className="p-6 relative">
+            <span className="w-9 h-9 rounded-xl bg-slate-900 text-white font-mono font-bold text-xs flex items-center justify-center mb-4">
               03
             </span>
-            <h4 className="font-bold text-slate-900 text-base mb-1">Quotation & Booking Lock</h4>
+            <h4 className="font-semibold text-[#0F172A] text-base mb-1.5">Quotation & Slot Lock</h4>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Official quotation is issued. Upon acceptance, slot is confirmed and sample receipt is logged at the reception desk.
+              Official demonstration quotation is finalized. Upon requester acceptance, slot is confirmed and physical sample intake is registered.
             </p>
-          </div>
+          </Card>
 
-          <div className="p-6 rounded-xl bg-white border border-slate-200">
-            <span className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 font-bold text-sm flex items-center justify-center mb-3">
+          <Card variant="default" className="p-6 relative">
+            <span className="w-9 h-9 rounded-xl bg-[#0052FF] text-white font-mono font-bold text-xs flex items-center justify-center mb-4 shadow-accent">
               04
             </span>
-            <h4 className="font-bold text-slate-900 text-base mb-1">Execution & Handover</h4>
+            <h4 className="font-semibold text-[#0F172A] text-base mb-1.5">Execution & Handover</h4>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Owner logs operating hours, completes scanning/testing, and marks reports ready for secure pickup or digital dispatch.
+              Equipment owner executes the run, logs operating duration, uploads raw data, and notifies the requester for secure result handover.
             </p>
+          </Card>
+        </div>
+      </section>
+
+      {/* 6. Strategic Call To Action */}
+      <section className="pb-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
+        <div className="rounded-3xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] text-white p-8 sm:p-14 relative overflow-hidden shadow-2xl">
+          <div className="pointer-events-none absolute -top-24 -right-24 w-80 h-80 rounded-full bg-[#0052FF]/20 blur-3xl" />
+          <div className="relative z-10 max-w-2xl space-y-4">
+            <SectionBadge label="Ready to Begin Research?" className="border-white/20 bg-white/5" />
+            <h3 className="font-calistoga text-3xl sm:text-4xl text-white">
+              Accelerate Your Institutional Research Today
+            </h3>
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Whether you need direct machine access or sample testing services, the R&D Cell is equipped to support your scientific breakthroughs.
+            </p>
+            <div className="flex flex-wrap items-center gap-4 pt-4">
+              <Button href="/catalog" variant="primary" size="lg" icon={<ArrowRight className="w-4 h-4" />}>
+                Explore Instruments
+              </Button>
+              <Button href="/track" variant="outline" size="lg" className="border-white/20 bg-white/10 text-white hover:bg-white/20">
+                Track Existing Request
+              </Button>
+            </div>
           </div>
         </div>
       </section>

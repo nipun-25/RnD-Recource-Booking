@@ -2,21 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  Microscope,
   Plus,
-  Edit2,
-  Archive,
-  CheckCircle2,
-  AlertTriangle,
-  Clock,
-  Building2,
-  DollarSign,
-  UserCheck,
   X,
 } from 'lucide-react';
 import { dataStore } from '@/lib/data-adapter';
 import { Equipment, EquipmentStatus, StaffUser } from '@/types';
 import { useAuth } from '@/lib/auth-context';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
 
 export default function AdminEquipmentPage() {
   const { currentUser } = useAuth();
@@ -137,33 +130,34 @@ export default function AdminEquipmentPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">Equipment Catalog & Availability Management</h2>
+          <h2 className="font-calistoga text-2xl text-[#0F172A]">Equipment Catalog & Availability</h2>
           <p className="text-xs text-slate-500">
-            Configure analytical instruments, technical parameters, demo pricing, and assigned owners.
+            Configure institutional instruments, technical capabilities, demonstration rates, and assigned owners.
           </p>
         </div>
 
-        <button
+        <Button
           onClick={openNewModal}
-          className="px-4 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-semibold text-xs inline-flex items-center gap-1.5 shadow-xs"
+          variant="primary"
+          size="md"
+          icon={<Plus className="w-4 h-4" />}
         >
-          <Plus className="w-4 h-4" />
           Add New Instrument
-        </button>
+        </Button>
       </div>
 
       {/* Equipment List Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+      <Card variant="elevated" className="p-0 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+          <table className="w-full text-left text-xs font-mono">
+            <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200 text-[11px]">
               <tr>
-                <th className="py-3 px-4">Instrument & Model</th>
-                <th className="py-3 px-4">Category & Location</th>
-                <th className="py-3 px-4">Operational Status</th>
-                <th className="py-3 px-4">Assigned Owner(s)</th>
-                <th className="py-3 px-4">Hourly Demo Rate</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+                <th className="py-3.5 px-4 font-sans font-semibold">Instrument & Model</th>
+                <th className="py-3.5 px-4 font-sans font-semibold">Category & Location</th>
+                <th className="py-3.5 px-4 font-sans font-semibold">Operational Status</th>
+                <th className="py-3.5 px-4 font-sans font-semibold">Assigned Owner(s)</th>
+                <th className="py-3.5 px-4 font-sans font-semibold">Demo Rate</th>
+                <th className="py-3.5 px-4 text-right font-sans font-semibold">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -174,20 +168,20 @@ export default function AdminEquipmentPage() {
                   .join(', ') || 'Unassigned';
 
                 return (
-                  <tr key={eq.id} className="hover:bg-slate-50/60">
-                    <td className="py-3 px-4">
-                      <p className="font-bold text-slate-900">{eq.name}</p>
-                      <p className="font-mono text-[11px] text-slate-500">{eq.model}</p>
+                  <tr key={eq.id} className="hover:bg-slate-50/60 transition-colors">
+                    <td className="py-4 px-4 font-sans">
+                      <p className="font-semibold text-slate-900">{eq.name}</p>
+                      <p className="font-mono text-[11px] text-slate-400">{eq.model}</p>
                     </td>
 
-                    <td className="py-3 px-4">
-                      <p className="font-semibold text-purple-900">{eq.category}</p>
+                    <td className="py-4 px-4 font-sans">
+                      <p className="font-semibold text-[#0052FF]">{eq.category}</p>
                       <p className="text-[11px] text-slate-500">{eq.location}</p>
                     </td>
 
-                    <td className="py-3 px-4">
+                    <td className="py-4 px-4">
                       <span
-                        className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
                           eq.status === 'available'
                             ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                             : eq.status === 'maintenance'
@@ -195,28 +189,29 @@ export default function AdminEquipmentPage() {
                             : 'bg-rose-50 text-rose-700 border-rose-200'
                         }`}
                       >
+                        <span className="w-1.5 h-1.5 rounded-full bg-current" />
                         {eq.status.toUpperCase()}
                       </span>
                     </td>
 
-                    <td className="py-3 px-4 text-slate-700 font-medium">
+                    <td className="py-4 px-4 text-slate-700 font-medium font-sans">
                       {ownerNames}
                     </td>
 
-                    <td className="py-3 px-4 font-bold text-slate-900">
+                    <td className="py-4 px-4 font-bold text-slate-900 font-sans">
                       ₹{eq.hourlyRateDemo} / hr
                     </td>
 
-                    <td className="py-3 px-4 text-right space-x-2">
+                    <td className="py-4 px-4 text-right space-x-2">
                       <button
                         onClick={() => openEditModal(eq)}
-                        className="px-2.5 py-1 rounded bg-slate-100 hover:bg-purple-100 hover:text-purple-800 text-slate-700 text-xs font-semibold transition-colors"
+                        className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-[#0052FF]/10 hover:text-[#0052FF] text-slate-700 text-xs font-semibold transition-colors cursor-pointer"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleArchive(eq.id, eq.name)}
-                        className="px-2.5 py-1 rounded bg-slate-100 hover:bg-rose-100 hover:text-rose-800 text-slate-600 text-xs font-semibold transition-colors"
+                        className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-rose-100 hover:text-rose-800 text-slate-600 text-xs font-semibold transition-colors cursor-pointer"
                         title="Archive while retaining historical logs"
                       >
                         Archive
@@ -228,19 +223,19 @@ export default function AdminEquipmentPage() {
             </tbody>
           </table>
         </div>
-      </div>
+      </Card>
 
       {/* Edit / Create Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-base font-bold text-slate-900">
+        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <Card variant="elevated" className="max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-5 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <h3 className="font-calistoga text-xl text-[#0F172A]">
                 {editingItem ? 'Edit Instrument Specifications' : 'Add New Research Instrument'}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -249,35 +244,35 @@ export default function AdminEquipmentPage() {
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Equipment Name *</label>
+                  <label className="block font-semibold text-slate-700 mb-1.5">Equipment Name *</label>
                   <input
                     type="text"
                     required
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     placeholder="e.g. Field Emission SEM"
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Model / Serial Tag *</label>
+                  <label className="block font-semibold text-slate-700 mb-1.5">Model / Serial Identification *</label>
                   <input
                     type="text"
                     required
                     value={form.model}
                     onChange={(e) => setForm({ ...form, model: e.target.value })}
                     placeholder="e.g. NanoProbe-9000FE"
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none font-mono"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Domain Category *</label>
+                  <label className="block font-semibold text-slate-700 mb-1.5">Domain Category *</label>
                   <select
                     value={form.category}
                     onChange={(e) => setForm({ ...form, category: e.target.value as Equipment['category'] })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none cursor-pointer"
                   >
                     <option value="Electron Microscopy">Electron Microscopy</option>
                     <option value="Surface Profilometry">Surface Profilometry</option>
@@ -289,11 +284,11 @@ export default function AdminEquipmentPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Operational Status *</label>
+                  <label className="block font-semibold text-slate-700 mb-1.5">Operational Status *</label>
                   <select
                     value={form.status}
                     onChange={(e) => setForm({ ...form, status: e.target.value as EquipmentStatus })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none cursor-pointer"
                   >
                     <option value="available">Available (Operational)</option>
                     <option value="maintenance">Under Maintenance</option>
@@ -303,47 +298,47 @@ export default function AdminEquipmentPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Physical Location *</label>
+                  <label className="block font-semibold text-slate-700 mb-1.5">Laboratory Location *</label>
                   <input
                     type="text"
                     required
                     value={form.location}
                     onChange={(e) => setForm({ ...form, location: e.target.value })}
-                    placeholder="e.g. Cleanroom Block B - Bay 102"
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    placeholder="e.g. Cleanroom Block B - Room 102"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Hourly Demo Rate (₹) *</label>
+                  <label className="block font-semibold text-slate-700 mb-1.5">Hourly Demo Fee (₹) *</label>
                   <input
                     type="number"
                     required
                     min="0"
                     value={form.hourlyRateDemo}
                     onChange={(e) => setForm({ ...form, hourlyRateDemo: Number(e.target.value) })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none font-mono"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Operating Hours Schedule *</label>
+                  <label className="block font-semibold text-slate-700 mb-1.5">Operating Hours Schedule *</label>
                   <input
                     type="text"
                     required
                     value={form.operatingHours}
                     onChange={(e) => setForm({ ...form, operatingHours: e.target.value })}
                     placeholder="09:00 - 18:00 (Mon-Fri)"
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Assigned Equipment Owner *</label>
+                  <label className="block font-semibold text-slate-700 mb-1.5">Assigned Specialist Owner *</label>
                   <select
                     value={form.assignedOwnerIds[0] || ''}
                     onChange={(e) => setForm({ ...form, assignedOwnerIds: [e.target.value] })}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none cursor-pointer"
                   >
                     {staffList.map((st) => (
                       <option key={st.id} value={st.id}>
@@ -355,33 +350,35 @@ export default function AdminEquipmentPage() {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Instrument Overview Description *</label>
+                <label className="block font-semibold text-slate-700 mb-1.5">Overview & Capabilities *</label>
                 <textarea
                   rows={3}
                   required
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#0052FF] focus:bg-white focus:outline-none"
                 />
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 font-semibold"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-semibold shadow-xs"
+                  variant="primary"
+                  size="sm"
                 >
                   {editingItem ? 'Save Modifications' : 'Create Instrument'}
-                </button>
+                </Button>
               </div>
             </form>
-          </div>
+          </Card>
         </div>
       )}
     </div>
