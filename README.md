@@ -139,3 +139,24 @@ The portal features an **Evaluation & Role Switcher Bar** at the top of every sc
 - **Charts:** Recharts
 - **Icons:** Lucide React
 - **Data Access:** Repository Pattern DAL (`IDataStore`)
+
+---
+
+## 6. Vercel Demo Deployment Guide
+
+This project is fully configured and ready for single-click demonstration deployment to [Vercel](https://vercel.com):
+
+### Deployment Configuration
+1. **Repository Import:** In your Vercel Dashboard, click **Add New...** > **Project**, and select the `RnD-Recource-Booking` repository.
+2. **Framework Preset:** Vercel automatically detects `Next.js`.
+3. **Build Command:** `npm run build` (or leave default).
+4. **Output Directory:** `.next` (leave default).
+5. **Install Command:** `npm install` (leave default).
+6. **Node.js Version:** Set to `20.x` or `22.x` under Project Settings > General.
+7. **Environment Variables:** **None required** for demo deployment mode. All demonstration records, state machines, and workflows run securely out-of-the-box.
+
+### Demonstration Architecture & Security Boundaries
+- **Browser-Local Isolation:** All interactions (equipment editing, booking requests, sample tracking updates) persist in the evaluator's browser (`localStorage`). State mutations do not overwrite the base application or leak to other evaluators.
+- **Evaluation Role Switcher:** The top evaluation bar and staff sign-in form are provided exclusively for testing multi-role workflows. Real institutional SSO and server-side authorization will be introduced in production.
+- **Zero Exposed Secrets:** No database credentials, Google Cloud keys, or sensitive university records are included in the repository or bundle.
+

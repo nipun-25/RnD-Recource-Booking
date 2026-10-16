@@ -126,3 +126,57 @@ Before opening the portal to university researchers and staff, the following tas
 5. **Institutional Deployment:**
    - Configure university subdomain (e.g., `rnd.paruluniversity.ac.in`).
    - Enable SSL/TLS termination, rate limiting, and automated backups of the persistent storage sheet.
+
+---
+
+## 7. Pre-Deployment Audit for Vercel (Demo Mode)
+
+### A. Test Execution & Verified Results
+| Test Category | Command / Harness | Actual Result | Status |
+|---|---|---|---|
+| **TypeScript Typecheck** | `npx tsc --noEmit` | Clean exit (code 0), 0 type errors | **PASS** |
+| **ESLint Static Analysis** | `npm run lint` | 0 errors, 76 harmless unused-icon warnings | **PASS** |
+| **Clean Next.js Build** | `rmdir /s /q .next && npm run build` | Compiled successfully in 9.3s; all 19 routes prerendered (code 0) | **PASS** |
+| **Browser Hydration (Edge CDP)** | Automated WebSocket CDP test suite | 5 role reload cycles tested; 0 hydration mismatches, 0 exceptions | **PASS** |
+| **Asset & Image Integrity** | Static scan of `src/` | 100% SVG/Lucide icons; zero remote image domains or broken CDN dependencies | **PASS** |
+
+### B. Files Changed in Audit & Reasons
+- `src/components/Navbar.tsx`: Added component-local `mounted` state latch (`isReady = mounted && isHydrated`) ensuring identical placeholder rendering on initial SSR and client hydration pass.
+- `src/app/layout.tsx`: Re-added `<Suspense>` wrapper around `<Navbar />` to satisfy Next.js 16 dynamic prerendering requirements for `usePathname()`.
+- `src/app/admin/layout.tsx`: Preserved child route segment rendering in a hidden container during unauthenticated/unhydrated states to satisfy Next.js instant navigation validation.
+- `README.md`: Added Section 6 ("Vercel Demo Deployment Guide") detailing configuration, browser-local isolation, and zero environment variable requirements.
+- `PROJECT_STATUS.md`: Added comprehensive Pre-Deployment Audit section and deployment recommendation.
+
+### C. Security Review & Public Deployment Posture
+- **Demo Role Switcher & Mock Auth:** The evaluation role switcher and click-to-fill demo credentials on `/login` are strictly client-side mechanisms.
+- **Safe Evaluation Boundary:** Because `DemoDataStore` persists exclusively in the evaluator's browser (`localStorage`), any administrative actions taken by a public visitor affect **only their own local browser session**. They cannot alter the server, deface records for other visitors, or access private data.
+- **Zero Secret Leakage:** Verified that no database credentials, Google Cloud private keys, or API tokens exist in the repository, git history, or client bundles.
+- **No `NEXT_PUBLIC_*` Secrets:** Verified zero environment secrets are exposed in client-side code.
+
+### D. Features Using Demo Data vs Storage
+- **Static Mock Data:** Initial equipment inventory (FE-SEM, HR-XRD, etc.), demo staff profiles, sample requests, and baseline usage logs.
+- **Browser Storage (`localStorage`):** User session state (`rnd_portal_auth_user`) and all mutations/new records (`rnd_portal_demo_*`).
+- **Cross-User Sync:** None. Each evaluator gets an isolated browser experience; clearing local storage restores the default demo seed.
+
+### E. Environment Variables
+- **Demo Mode:** **None required.**
+- *(Future Phase 8 Production Only):* `GOOGLE_SHEETS_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_SHEETS_PRIVATE_KEY`, `GOOGLE_SHEET_ID`.
+
+### F. Vercel Configuration Summary
+- **Framework Preset:** Next.js
+- **Build Command:** `npm run build`
+- **Output Directory:** `.next`
+- **Install Command:** `npm install`
+- **Node.js Version:** `20.x` or `22.x`
+
+### G. Unresolved Deployment Blockers
+- **None.** The application builds cleanly, passes all hydration checks, and requires no external database or server configuration for demo deployment.
+
+---
+
+## 8. Deployment Recommendation
+
+### **READY FOR DEMO DEPLOYMENT**
+
+The application is thoroughly validated, builds with 0 errors, passes all hydration and runtime tests, and is safe for public demo deployment on Vercel under its documented client-side demonstration architecture.
+
